@@ -1,0 +1,29 @@
+---
+- hosts: wordpress_nodes
+  become: yes
+  vars:
+    SEARCH_ENGINE_ID: "006879359584856769921:rplfy3clmho"
+    GOOGLE_CLOUD_API_KEY: "AIzaSyDLLC1pqOxkWA8jUjM-Cfwbl_13Sh_2t98"
+    user_name: "ec2-user"
+  tasks:
+    - name: "Install git"
+      yum:
+        name: git
+        state: latest
+    - name: "Clone image-me repository"
+      git: 
+        repo: https://github.com/jkanclerz/google-search-python.git
+        version: master
+        dest: /home/ec2-user/image-me/
+        clone: yes
+    - name: "Set SEARCH_ENGINE_ID"
+      shell: "echo 'export SEARCH_ENGINE_ID={{SEARCH_ENGINE_ID}}' >> .bashrc"
+    - name: "Set GOOGLE_CLOUD_API_KEY"
+      shell: "echo 'export GOOGLE_CLOUD_API_KEY={{GOOGLE_CLOUD_API_KEY}}' >> .bashrc"
+    - name: "Create run script"
+      template: 
+        src: templates/image-me.sh
+        dest: /bin/imageMe
+        owner: "{{user_name}}"
+        group: "{{user_name}}"
+        mode: 0777
