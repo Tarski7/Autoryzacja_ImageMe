@@ -1,5 +1,5 @@
 ---
-- hosts: wordpress_nodes
+- hosts: imageMe_nodes
   become: yes
   vars:
     SEARCH_ENGINE_ID: "006879359584856769921:rplfy3clmho"
